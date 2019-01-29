@@ -10,7 +10,9 @@ class Course(models.Model):
     )
     image = models.ImageField(
         upload_to='courses/images',
-        verbose_name='Imagem'
+        verbose_name='Imagem',
+        null=True,
+        blank=True
     )
     created_at = models.DateTimeField(
         'Criado em', auto_now_add=True
