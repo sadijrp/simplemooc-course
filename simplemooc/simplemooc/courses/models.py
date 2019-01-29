@@ -33,3 +33,11 @@ class Course(models.Model):
     )
 
     objects = CourseManager()
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Curso"
+        verbose_name_plural = "Cursos"
+        ordering = ['name']
