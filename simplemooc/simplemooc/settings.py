@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     
     'simplemooc.core',
     'simplemooc.courses',
+    'simplemooc.account',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'simplemooc', 'media')
 
 MEDIA_URL = '/media/'
 
+# Email
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 CONTACT_EMAIL = 'contato@simplemooc.com'
 DEFAULT_FROM_EMAIL = 'contato@simplemooc.com'
+
+# Auth
+
+LOGIN_URL = 'account:login'
+LOGIN_REDIRECT_URL = 'core:home'
+LOGOUT_URL = 'account:logout'
