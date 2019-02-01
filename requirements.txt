@@ -1,4 +1,5 @@
 Django==2.1.5
+gunicorn==19.9.0
 model-mommy==1.6.0
 pbr==5.1.1
 Pillow==5.4.1
