@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.contrib.auth.forms import PasswordChangeForm, SetPasswordForm
+from django.contrib import messages
+
 from .forms import RegisterForm, EditAccountForm, PasswordResetForm
 from .models import PasswordReset
 
@@ -10,8 +12,9 @@ from .models import PasswordReset
 @login_required
 def dashboard(request):
     template_name = "accounts/dashboard.html"
-    
+
     return render(request, template_name)
+
 
 @login_required
 def edit(request):
@@ -23,13 +26,16 @@ def edit(request):
         if form.is_valid():
             form.save()
             form = EditAccountForm(instance=request.user)
-            context["success"] = True
+            message = "Seus dados foram alterados com sucesso."
+            messages.success(request, message)
+            return redirect('account:dashboard')
     else:
         form = EditAccountForm(instance=request.user)
-        
+
     context["form"] = form
-    
+
     return render(request, template_name, context)
+
 
 @login_required
 def edit_password(request):
@@ -48,11 +54,12 @@ def edit_password(request):
 
     return render(request, template_name, context)
 
+
 def password_reset(request):
     template_name = "accounts/password_reset.html"
     form = PasswordResetForm(request.POST or None)
     context = {}
-    
+
     if form.is_valid():
         form.save()
         context["success"] = True
@@ -60,6 +67,7 @@ def password_reset(request):
     context["form"] = form
 
     return render(request, template_name, context)
+
 
 def password_reset_confirm(request, key):
     template_name = "accounts/password_reset_confirm.html"
@@ -70,10 +78,11 @@ def password_reset_confirm(request, key):
     if form.is_valid():
         form.save()
         context["success"] = True
-    
+
     context["form"] = form
 
     return render(request, template_name, context)
+
 
 def register(request):
     template_name = "accounts/register.html"
@@ -83,7 +92,8 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            user = authenticate(username=user.username,
+            user = authenticate(
+                username=user.username,
                 password=form.cleaned_data["password1"])
             login(request, user)
             return redirect('core:home')
