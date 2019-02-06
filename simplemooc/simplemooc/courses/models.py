@@ -65,7 +65,7 @@ class Enrollment(models.Model):
         on_delete=models.PROTECT
     )
     course = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
+        Course,
         verbose_name="Curso",
         related_name="courseenrollments",
         on_delete=models.PROTECT
@@ -84,6 +84,10 @@ class Enrollment(models.Model):
         verbose_name='Atualizado em',
         auto_now=True
     )
+
+    def active(self):
+        self.status = 1
+        self.save()
 
     class Meta:
         verbose_name = "Inscrição"
