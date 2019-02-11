@@ -51,7 +51,7 @@
                     <a href="{% url 'courses:announcements' enrollment.course.slug %}" class="pure-button pure-button-primary">
                         Acessar
                     </a>
-                    <a href="#" class="pure-button button-error">
+                    <a href="{% url 'courses:undo_enrollment' enrollment.course.slug %}" class="pure-button button-error">
                         Cancelar
                     </a>
                 </div>
