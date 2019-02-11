@@ -14,18 +14,51 @@
     <div class="pure-u-1-3">
         <div class="pure-menu pure-menu-open">
             <ul>
+                <li class="pure-menu-heading">
+                    Bem-vindo, {{ user }}!
+                </li>
                 {% my_courses user %}
-                <li class="pure-menu-heading">Minha Conta</li>
-                <li><a href="{% url 'account:edit' %}">Editar Conta</a></li>
-                <li><a href="{% url 'account:edit_password' %}">Editar Senha</a></li>
+                <li class="pure-menu-heading">Conta</li>
+                <li>
+                    <a href="{% url 'account:edit' %}">
+                        <i class="fas fa-cog"></i>
+                        Editar Conta
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'account:edit_password' %}">
+                        <i class="fas fa-lock"></i>
+                        Editar Senha
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
     <div class="pure-u-2-3">
         <div class="inner">
             {% block dashboard_content %}
-            <p><strong>Nome</strong>: {{ user.username}}</p>
-            <p><strong>E-mail</strong>: {{ user.email }}</p>
+            <h2>Meus Cursos</h2>
+            {% load_my_courses user as enrollments %}
+            {% for enrollment in enrollments %}
+            <div class="well">
+                <h3>{{ enrollment.course }}
+                    ({{ enrollment.course.start_date|date:'d/m/Y'|default:'Sem data de início.' }})
+                </h3>
+                {{ enrollment.course.description|linebreaks }}
+                <div class="pure-controls">
+                    <a href="#" class="pure-button pure-button-primary">
+                        Acessar
+                    </a>
+                    <a href="#" class="pure-button button-error">
+                        Cancelar
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <aside class="pure-u-1">
+                <p>Nenhum curso inscrito.</p>
+            </aside>
+            {% endfor %}
             {% endblock %}
         </div>
     </div>
