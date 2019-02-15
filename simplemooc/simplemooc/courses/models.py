@@ -100,7 +100,10 @@ class Enrollment(models.Model):
 
 class Announcement(models.Model):
     course = models.ForeignKey(
-        Course, verbose_name='Curso', on_delete=models.CASCADE)
+        Course,
+        verbose_name='Curso',
+        on_delete=models.CASCADE,
+        related_name='announcements')
     title = models.CharField('Título', max_length=100)
     content = models.TextField('Conteúdo')
     created_at = models.DateTimeField(
