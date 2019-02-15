@@ -14,6 +14,9 @@ urlpatterns = [
             views.announcements,
             name='announcements'),
     re_path(r'^(?P<slug>[\w_-]+)/cancelar-inscricao/$',
-        views.undo_enrollment,
-        name='undo_enrollment'),
+            views.undo_enrollment,
+            name='undo_enrollment'),
+    re_path(r'^(?P<slug>[\w_-]+)/anuncios/(?P<pk>\d+)/$',
+            views.announcement,
+            name='announcement'),
 ]

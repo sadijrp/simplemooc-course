@@ -125,7 +125,7 @@ class Announcement(models.Model):
 
 
 class Comment(models.Model):
-    Announcement = models.ForeignKey(
+    announcement = models.ForeignKey(
         Announcement,
         verbose_name='Anúncio',
         related_name='comments',
