@@ -2,6 +2,8 @@ from django.db import models
 from django.urls import reverse
 from django.conf import settings
 
+from simplemooc.core.mail import send_mail_template
+
 
 class CourseManager(models.Manager):
 
@@ -88,7 +90,7 @@ class Enrollment(models.Model):
     def active(self):
         self.status = 1
         self.save()
-    
+
     def is_approved(self):
         return self.status == 1
 
@@ -148,3 +150,27 @@ class Comment(models.Model):
         verbose_name = 'Comentário'
         verbose_name_plural = 'Comentários'
         ordering = ['created_at']
+
+
+def post_save_announcement(instance, created, **kwargs):
+    if created:
+        announcement = instance
+        subject = announcement.title
+        context = {
+            'announcement': announcement
+        }
+        template_name = 'courses/announcement_mail.html'
+        enrollments = Enrollment.objects.filter(
+            course=announcement.course,
+            status=1
+        )
+
+        for enrollment in enrollments:
+            recipient_list = [enrollment.user.email]
+            send_mail_template(subject, template_name, context, recipient_list)
+
+
+models.signals.post_save.connect(
+    post_save_announcement,
+    sender=Announcement,
+    dispatch_uid='post_save_announcement')
