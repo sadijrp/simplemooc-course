@@ -197,7 +197,7 @@ class Material(models.Model):
         return bool(self.is_embedded)
 
     def __str__(self):
-        return selff.name
+        return self.name
 
     class Meta:
         verbose_name = 'Material'
