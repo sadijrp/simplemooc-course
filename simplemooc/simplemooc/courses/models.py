@@ -200,11 +200,11 @@ class Material(models.Model):
     lesson = models.ForeignKey(
         Lesson,
         verbose_name='Aula',
-        related_name='Materiais',
+        related_name='materials',
         on_delete=models.CASCADE)
 
     def is_embedded(self):
-        return bool(self.is_embedded)
+        return bool(self.embedded)
 
     def __str__(self):
         return self.name

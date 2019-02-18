@@ -25,4 +25,7 @@ urlpatterns = [
     re_path(r'^(?P<slug>[\w_-]+)/aula/(?P<pk>\d+)/$',
             views.lesson,
             name='lesson'),
+    re_path(r'^(?P<slug>[\w_-]+)/material/(?P<pk>\d+)/$',
+            views.material,
+            name='material'),
 ]
