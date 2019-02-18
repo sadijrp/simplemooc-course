@@ -152,6 +152,58 @@ class Comment(models.Model):
         ordering = ['created_at']
 
 
+class Lesson(models.Model):
+    name = models.CharField('Nome', max_length=100)
+    description = models.TextField('Descrição', blank=True)
+    number = models.IntegerField('Número (ordem)', blank=True, default=1)
+    release_date = models.DateField('Data de Liberação', blank=True, null=True)
+    created_at = models.DateTimeField(
+        verbose_name='Criado em',
+        auto_now_add=True)
+    updated_at = models.DateTimeField(
+        verbose_name='Atualizado em',
+        auto_now=True)
+
+    course = models.ForeignKey(
+        Course,
+        verbose_name='Curso',
+        related_name='lessons',
+        on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Aula'
+        verbose_name_plural = 'Aulas'
+        ordering = ['number']
+
+
+class Material(models.Model):
+    name = models.CharField('Nome', max_length=100)
+    embedded = models.TextField('Video embedded', blank=True)
+    file = models.FileField(
+        upload_to='lessons/materials',
+        blank=True,
+        null=True)
+
+    lesson = models.ForeignKey(
+        Lesson,
+        verbose_name='Aula',
+        related_name='Materiais',
+        on_delete=models.CASCADE)
+
+    def is_embedded(self):
+        return bool(self.is_embedded)
+
+    def __str__(self):
+        return selff.name
+
+    class Meta:
+        verbose_name = 'Material'
+        verbose_name_plural = 'Materias'
+
+
 def post_save_announcement(instance, created, **kwargs):
     if created:
         announcement = instance
