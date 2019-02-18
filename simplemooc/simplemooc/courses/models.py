@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
+from django.utils import timezone
 
 from simplemooc.core.mail import send_mail_template
 
@@ -45,6 +46,10 @@ class Course(models.Model):
 
     def get_absolute_url(self):
         return reverse('courses:details', args=[self.slug])
+
+    def released_lessons(self):
+        today = timezone.now().date()
+        return self.lessons.filter(release_date__lte=today)
 
     class Meta:
         verbose_name = "Curso"
@@ -172,6 +177,11 @@ class Lesson(models.Model):
 
     def __str__(self):
         return self.name
+
+    def is_available(self):
+        if self.release_date:
+            today = timezone.now().date()
+            return self.release_date >= today
 
     class Meta:
         verbose_name = 'Aula'
