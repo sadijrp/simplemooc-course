@@ -4,6 +4,7 @@ from django.contrib import messages
 
 from .models import Course, Enrollment, Announcement
 from .forms import ContactCourse, CommentForm
+from .decorators import enrollment_required
 
 
 def index(request):
@@ -80,20 +81,11 @@ def undo_enrollment(request, slug):
 
 
 @login_required
+@enrollment_required
 def announcements(request, slug):
     template_name = 'courses/announcements.html'
     context = {}
-
-    course = get_object_or_404(Course, slug=slug)
-    if not request.user.is_staff:
-        enrollment = get_object_or_404(
-            Enrollment,
-            user=request.user,
-            course=course
-        )
-        if not enrollment.is_approved():
-            messages.error(request, "A sua inscrição está pendente.")
-            return redirect('account:dashboard')
+    course = request.course
 
     context['course'] = course
     context['announcements'] = course.announcements.all()
@@ -102,27 +94,17 @@ def announcements(request, slug):
 
 
 @login_required
+@enrollment_required
 def announcement(request, slug, pk):
     template_name = 'courses/announcement.html'
     context = {}
-
-    course = get_object_or_404(Course, slug=slug)
-    if not request.user.is_staff:
-        enrollment = get_object_or_404(
-            Enrollment,
-            user=request.user,
-            course=course
-        )
-        if not enrollment.is_approved():
-            messages.error(request, "A sua inscrição está pendente.")
-            return redirect('account:dashboard')
-
+    course = request.course
     announcement = get_object_or_404(course.announcements.all(), pk=pk)
     form = CommentForm(request.POST or None)
+
     if form.is_valid():
         comment = form.save(commit=False)
         comment.user = request.user
-        print(announcement.id, "ajsaskdjhaskdhask")
         comment.announcement = announcement
         comment.save()
         form = CommentForm()
