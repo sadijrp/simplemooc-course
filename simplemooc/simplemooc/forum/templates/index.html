@@ -17,7 +17,7 @@
                 </li>
                 <li>
                     <a href="">
-                        <i class="fa fa-refresh"></i>
+                        <i class="fas fa-sync-alt"></i>
                         Mais Recentes
                     </a>
                 </li>
@@ -29,51 +29,66 @@
                 </li>
                 <li>
                     <a href="">
-                        <i class="fa fa-comments-o"></i>
+                        <i class="fas fa-comments"></i>
                         Mais Comentados
                     </a>
                 </li>
                 <li class="pure-menu-heading">Tags</li>
                 <li>
+                    {% for tag in tags %}
                     <a href="#" class="tags">
                         <i class="fa fa-tag"></i>
-                        asdas
+                        {{ tag }}
                     </a>
+                    {% endfor %}
                 </li>
             </ul>
         </div>
     </div>
     <div class="pure-u-2-3">
         <div class="inner">
+            {% for thread in object_list %}
             <div class="well">
-                <h3><a href="" title="">asdasd</a></h3>
+                <h3><a href="" title="">{{ thread.title }}</a></h3>
                 <h5>
-                    asdasdasdasdasd
+                    Criado por {{ thread.author }}
+                    | {{ thread.answers }} resposta{{ thread.answers|pluralize }}
+                    | {{ thread.views }} Visualizaç{{ thread.views|pluralize:"ão,ões" }}
                 </h5>
                 <p>
                     <i class="fa fa-tags"></i>
                     Tags:
+                    {% for tag in thread.tags.all %}
+                        <a href="" title="">{{ tag }}</a>
+                        {% if not forloop.last%},{% endif %}
+                    {% endfor %}
 
-                    <a href="" title="">asdas</a>
-                    <a class="fright" href="" title="">Atualizado aatrás</a>
+                    <a class="fright" href="" title="">
+                        Atualizado a {{ thread.updated_at|timesince }} atrás.
+                    </a>
                 </p>
             </div>
-
+            {% endfor %}
             <ul class="pagination pagination-centered">
-
+                {% if page_obj.has_previous %}
                 <li>
-                    <a href="" title="">Anterior</a>
+                    <a href="?page={{ page_obj.previous_page_number }}" title="">
+                        Anterior
+                    </a>
                 </li>
-
-
+                {% endif %}
+                {% for page in paginator.page_range %}
                 <li>
-                    <a href="" title="">asdasdfasd</a>
+                    <a href="?page={{ page }}" title="">{{ page }}</a>
                 </li>
-
-
+                {% endfor %}
+                {% if page_obj.has_next %}
                 <li>
-                    <a href="" title="">Próxima</a>
+                    <a href="?page={{ page_obj.next_page_number }}" title="">
+                        Próxima
+                    </a>
                 </li>
+                {% endif %}
 
             </ul>
         </div>
