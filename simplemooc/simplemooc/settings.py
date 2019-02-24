@@ -41,9 +41,10 @@ INSTALLED_APPS = [
 
     'taggit',
 
+    'simplemooc.account',
     'simplemooc.core',
     'simplemooc.courses',
-    'simplemooc.account',
+    'simplemooc.forum',
 ]
 
 MIDDLEWARE = [

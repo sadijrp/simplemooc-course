@@ -4,7 +4,7 @@ from django.conf import settings
 from taggit.managers import TaggableManager
 
 
-class Thread(model.Models):
+class Thread(models.Model):
     title = models.CharField('Título', max_length=100)
     body = models.TextField('Mensagem')
     views = models.IntegerField('Visualizações', blank=True, default=0)
