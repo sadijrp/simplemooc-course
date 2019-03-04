@@ -9,4 +9,7 @@ urlpatterns = [
     re_path(r'^tag/(?P<tag>[\w_-]+)',
             views.ForumView.as_view(),
             name='tagged_index'),
+    re_path(r'^(?P<slug>[\w_-]+)',
+            views.ThreadView.as_view(),
+            name='thread'),
     ]

@@ -1,11 +1,13 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
 from taggit.managers import TaggableManager
 
 
 class Thread(models.Model):
     title = models.CharField('Título', max_length=100)
+    slug = models.SlugField('Identificador', max_length=100, unique=True)
     body = models.TextField('Mensagem')
     views = models.IntegerField('Visualizações', blank=True, default=0)
     answers = models.IntegerField('Respostas', blank=True, default=0)
@@ -23,6 +25,9 @@ class Thread(models.Model):
         verbose_name='Autor',
         on_delete=models.CASCADE,
         related_name='threads')
+
+    def get_absolute_url(self):
+        return reverse('forum:thread', args=[self.slug])
 
     def __str__(self):
         return self.title
