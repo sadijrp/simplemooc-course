@@ -56,13 +56,43 @@
                 <p>
                     <i class="fa fa-tags"></i>
                     {% for tag in object.tags.all %}
-                        <a href="{% url 'forum:tagged_index' tag.slug %}" title="">{{ tag }}</a>
-                        {% if not forloop.last%},{% endif %}
+                    <a href="{% url 'forum:tagged_index' tag.slug %}" title="">{{ tag }}</a>
+                    {% if not forloop.last%},{% endif %}
                     {% endfor %}
                     <a class="fright" href="{{ object.get_absolute_url }}">
                         Criado a {{ object.created_at|timesince }} atrás.
-                        </a>
+                    </a>
                 </p>
+            </div>
+            <div class="well">
+                <h4 id="comments">Respostas
+                    <a class="fright" href="#add_comment">Responder</a>
+                </h4>
+                {% for reply in object.replies.all %}
+                    <hr />
+                    {% filter linebreaks %}
+                    <strong>{{ reply.author }}</strong> disse à {{ reply.created_at|timesince }} atrás:
+                    {{ reply.reply }}
+                    {% endfilter %}
+                {% endfor %}
+                <hr />
+                <form method="POST" class="pure-form pure-form-stacked" id="add_comment">
+                    <fieldset>
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="pure-control-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                        {% endfor %}
+                        <div class="pure-controls">
+                            <button type="submit" class="pure-button pure-button-primary">
+                                Enviar
+                            </button>
+                        </div>
+                    </fieldset>
+                </form>
             </div>
         </div>
     </div>
