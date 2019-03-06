@@ -76,7 +76,7 @@
                 </p>
                 <p>
                     {% if reply.correct %}
-                        {% if reply.author == user %}
+                        {% if object.author == user %}
                         <a href="{% url 'forum:incorrect_reply' reply.pk %}" class="pure-button button-error">
                             Cancelar resposta correta
                         </a>
@@ -85,7 +85,7 @@
                             Resposta indicada pelo autor
                         </span>
                         <br />
-                    {% elif reply.author == user %}
+                    {% elif object.author == user %}
                         <a href="{% url 'forum:correct_reply' reply.pk %}"class="pure-button button-success">
                             Resposta correta
                         </a>

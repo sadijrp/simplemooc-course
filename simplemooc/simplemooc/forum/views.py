@@ -76,7 +76,11 @@ class CorrectReplyView(View):
     correct = True
 
     def get(self, request, pk):
-        reply = get_object_or_404(Reply, pk=pk, author=self.request.user)
+        reply = get_object_or_404(
+            Reply,
+            pk=pk,
+            thread__author=self.request.user)
+
         reply.correct = self.correct
         reply.save()
         return redirect(reply.thread.get_absolute_url())
