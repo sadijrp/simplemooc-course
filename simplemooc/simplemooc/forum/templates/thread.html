@@ -68,12 +68,29 @@
                 <h4 id="comments">Respostas
                     <a class="fright" href="#add_comment">Responder</a>
                 </h4>
-                {% for reply in object.replies.all %}
-                    <hr />
-                    {% filter linebreaks %}
+                {% for reply in replies %}
+                <hr />
+                <p>
                     <strong>{{ reply.author }}</strong> disse à {{ reply.created_at|timesince }} atrás:
-                    {{ reply.reply }}
-                    {% endfilter %}
+                    {{ reply.reply|linebreaksbr }}
+                </p>
+                <p>
+                    {% if reply.correct %}
+                        {% if reply.author == user %}
+                        <a href="{% url 'forum:incorrect_reply' reply.pk %}" class="pure-button button-error">
+                            Cancelar resposta correta
+                        </a>
+                        {% endif %}
+                        <span class="fright label-success">
+                            Resposta indicada pelo autor
+                        </span>
+                        <br />
+                    {% elif reply.author == user %}
+                        <a href="{% url 'forum:correct_reply' reply.pk %}"class="pure-button button-success">
+                            Resposta correta
+                        </a>
+                    {% endif %}
+                </p>
                 {% endfor %}
                 <hr />
                 <form method="POST" class="pure-form pure-form-stacked" id="add_comment">

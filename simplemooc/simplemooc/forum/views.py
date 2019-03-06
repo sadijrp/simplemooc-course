@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import ListView, DetailView, View
 from django.contrib import messages
 
-from .models import Thread
+from .models import Thread, Reply
 from .forms import ReplyForm
 
 
@@ -37,8 +37,11 @@ class ThreadView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        thread = context['object']
         context['tags'] = Thread.tags.all()
         context['form'] = ReplyForm(self.request.POST or None)
+        context['replies'] = thread.replies.all().order_by('-created_at')
+
         return context
 
     def get(self, request, *args, **kwargs):
@@ -66,3 +69,14 @@ class ThreadView(DetailView):
             messages.success(request, 'Resposta criada com sucesso')
             context['form'] = ReplyForm
         return self.render_to_response(context)
+
+
+class CorrectReplyView(View):
+
+    correct = True
+
+    def get(self, request, pk):
+        reply = get_object_or_404(Reply, pk=pk, author=self.request.user)
+        reply.correct = self.correct
+        reply.save()
+        return redirect(reply.thread.get_absolute_url())
